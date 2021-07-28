@@ -1,7 +1,5 @@
 <% layout('layouts/boilerplate') %>
     <link rel="stylesheet" href="/stylesheets/stars.css">
-
-
     <div class="row">
         <div class="col-6">
             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
@@ -10,7 +8,7 @@
                         <div class="carousel-item <%= i === 0 ? 'active':'' %>">
                             <img src="<%=img.url%>" class="d-block w-100" alt="">
                         </div>
-                        <% }) %>
+                    <% }) %>
                 </div>
                 <% if(campground.images.length>1) {%>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
@@ -35,34 +33,28 @@
                     </p>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item text-muted">
-                        <%= campground.location %>
-                    </li>
-                    <li class="list-group-item">
-                        Submitted by <%= campground.author.username %>
-                    </li>
+                    <li class="list-group-item text-muted"><%= campground.location %></li>
+                    <li class="list-group-item">Submitted by <%= campground.author.username %></li>
                     <li class="list-group-item">$<%= campground.price %>/night</li>
                 </ul>
                 <% if(currentUser && campground.author.equals(currentUser._id)) { %>
-                    <div class="card-body">
-                        <a href="/campgrounds/<%= campground._id %>/edit" class="card-link btn btn-info">Edit</a>
-                        <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST"
-                            class="card-link d-inline">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
-                    <% } %>
-                        <div class="card-footer text-muted">
-                            2 days ago
-                        </div>
+                <div class="card-body">
+                    <a href="/campgrounds/<%=campground._id%>/edit" class="card-link btn btn-info">Edit</a>
+                    <form action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST" class="d-inline">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+                <% } %>
+                <div class="card-footer text-muted">
+                    2 days ago
+                </div>
             </div>
         </div>
         <div class="col-6">
             <div id='map'></div>
             <% if(currentUser){ %>
-                <h2>Leave a Review</h2>
-                <form action="/campgrounds/<%=campground._id%>/reviews" method="POST" class="mb-3 validated-form"
-                    novalidate>
+            <h2>Leave a Review</h2>
+            <form action="/campgrounds/<%=campground._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
                     <!-- <div class="mb-3">
                         <label class="form-label" for="rating">Rating</label>
                         <input class="form-range" type="range" min="1" max="5" id="rating" name="review[rating]">
