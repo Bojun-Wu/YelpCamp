@@ -1,12 +1,12 @@
 const Campground = require('../models/campground')
-const mbxGrocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapBoxToken = process.env.MAPBOX_TOKEN
-const geocoder = mbxGrocoding({ accessToken: mapBoxToken });
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require("../cloudinary");
 const { map } = require('../seeds/cities');
 
 module.exports.index = async (req, res) => {
-    const campgrounds = await Campground.find({});
+    const campgrounds = await Campground.find({}).populate('popupText');
     res.render('campgrounds/index', { campgrounds })
 }
 
@@ -30,7 +30,7 @@ module.exports.createCampground = async (req, res, next) => {
     res.redirect(`/campgrounds/${campground._id}`)
 }
 
-module.exports.showCampground = async (req, res, next) => {
+module.exports.showCampground = async (req, res) => {
     const campground = await Campground.findById(req.params.id).populate({
         path: 'reviews',
         populate: {
@@ -46,7 +46,7 @@ module.exports.showCampground = async (req, res, next) => {
 
 module.exports.renderEditForm = async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findById(id);
+    const campground = await Campground.findById(id)
     if (!campground) {
         req.flash('error', 'Cannot find that campground')
         return res.redirect('/campgrounds')
